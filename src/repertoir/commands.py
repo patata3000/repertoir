@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
 import click
 
-from repertoir.download_video import download_youtube_video
-from repertoir.search_video_repertoir import search_video_repertoire
+from .download_video import download_youtube_video
+from .search_video_repertoir import search_video_repertoire
 
 
 @click.group()

@@ -13,13 +13,23 @@ readme = "README.md"
 requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Operating System :: Linux",
+    "Operating System :: POSIX :: Linux",
+]
+dependencies = [
+  "click"
 ]
 
 [project.urls]
-Homepage = "https://gitlab."
-Issues = "https://github.com/pypa/sampleproject/issues"
+Homepage = "https://gitlab.com/aittaemualliug/repertoir"
+Issues = "https://gitlab.com/aittaemualliug/repertoir/issues"
 
+[tool.hatch.build]
+include = [
+  "src"
+]
+
+[project.scripts]
+repertoir = "src.repertoir.commands:cli"
 
 [tool.black]
 line-length = 88
