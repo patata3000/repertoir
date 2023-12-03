@@ -3,7 +3,7 @@ import os
 # Raw data
 VIDEO_STORAGE_PATH = "/home/guillaume/Videos/repertoire"
 VIDEO_DIR_PATH = f"{VIDEO_STORAGE_PATH}/youtube/videos"
-VIDEO_TMP_DIR_PATH = f"{VIDEO_STORAGE_PATH}/youtube/videos/tmp"
+VIDEO_TMP_DIR_PATH = f"{VIDEO_STORAGE_PATH}/youtube/tmp_videos"
 INDEX_DIR_PATH = f"{VIDEO_STORAGE_PATH}/youtube/index"
 
 

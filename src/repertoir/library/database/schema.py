@@ -15,9 +15,9 @@ def create_tables(db_cursor: DBCursor):
         """
 CREATE TABLE IF NOT EXISTS channel (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    channel_id TEXT NOT NULL,
+    ext_source_id TEXT NOT NULL,
     name TEXT NOT NULL,
-    UNIQUE(channel_id)
+    UNIQUE(ext_source_id)
 );
         """
     )
@@ -25,13 +25,14 @@ CREATE TABLE IF NOT EXISTS channel (
         """
 CREATE TABLE IF NOT EXISTS video (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    video_id TEXT NOT NULL,
+    ext_source_id TEXT NOT NULL,
     title TEXT NOT NULL,
-    path TEXT NOT NULL,
+    filename TEXT NOT NULL,
     channel_id INTEGER NOT NULL,
-    UNIQUE(video_id),
+    watched BOOLEAN NOT NULL DEFAULT FALSE,
+    UNIQUE(ext_source_id),
     UNIQUE(title),
-    UNIQUE(path),
+    UNIQUE(filename),
     FOREIGN KEY(channel_id) REFERENCES channel(id)
 );
         """

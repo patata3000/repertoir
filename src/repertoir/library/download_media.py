@@ -4,8 +4,9 @@ import subprocess
 from dataclasses import dataclass
 from sqlite3 import Connection as DBConnection
 
-from repertoir.config import INDEX_DIR_PATH, VIDEO_DIR_PATH, VIDEO_TMP_DIR_PATH
-from repertoir.library.database.manage_videos import insert_channel, insert_video
+from repertoir.config import INDEX_DIR_PATH, VIDEO_DIR_PATH
+from repertoir.library.database.media.channel import insert_channel
+from repertoir.library.database.media.video import insert_video
 
 
 @dataclass
@@ -41,17 +42,20 @@ def download_youtube_video(db_conn: DBConnection, url: str):
     subprocess.check_output(
         ["dunstify", "Downloading video", f"{title}", "--replace", notification_id]
     )
-    INFO_JSON_TEMPLATE_NAME = "%(title)s_[%(id)s]"
-    VIDEO_TEMPLATE_NAME = "%(title)s_[%(id)s].%(ext)s"
+    INFO_JSON_TEMPLATE_NAME = "%(id)s"
+    VIDEO_TEMPLATE_NAME = "%(id)s.%(ext)s"
+    base_call = [
+        "yt-dlp",
+        "--write-info-json",
+        "--paths",
+        f"{VIDEO_DIR_PATH}",
+        "--paths",
+        f"infojson:{INDEX_DIR_PATH}",
+    ]
     info_json_filename, media_filename = (
         subprocess.check_output(
             [
-                "yt-dlp",
-                "--write-info-json",
-                "--paths",
-                f"{VIDEO_DIR_PATH}",
-                "--paths",
-                f"infojson:{INDEX_DIR_PATH}",
+                *base_call,
                 "--print",
                 f"{INFO_JSON_TEMPLATE_NAME}.info.json",
                 "--print",
@@ -65,14 +69,7 @@ def download_youtube_video(db_conn: DBConnection, url: str):
     )
     subprocess.call(
         [
-            "yt-dlp",
-            "--write-info-json",
-            "--paths",
-            f"{VIDEO_DIR_PATH}",
-            "--paths",
-            f"infojson:{INDEX_DIR_PATH}",
-            "--paths",
-            f"temp:{VIDEO_TMP_DIR_PATH}",
+            *base_call,
             "-o",
             VIDEO_TEMPLATE_NAME,
             "-o",
