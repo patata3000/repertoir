@@ -7,7 +7,7 @@ from repertoir.config import VIDEO_STORAGE_PATH
 
 def video_repertoire():
     for dirpath, _dirnames, filenames in Path(VIDEO_STORAGE_PATH).walk():
-        if dirpath.match("index$"):
+        if dirpath.match("index"):
             continue
         for filename in filenames:
             yield Path(os.path.join(dirpath, filename))
