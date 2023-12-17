@@ -24,8 +24,10 @@ def get_filepath(filename: str):
     return os.path.join(VIDEO_DIR_PATH, filename)
 
 
-def search_video_data(db_conn, search_term: str = ""):
+def search_video_data(db_conn, search_term: str = "", last: bool = False):
     channel = None
+    if last:
+        return choose_video(db_conn, search_term, None, last=True)
     if search_term == "":
         channel = choose_channel(db_conn, search_term)
     return choose_video(db_conn, search_term, channel.id if channel else None)
@@ -40,21 +42,31 @@ def choose_channel(db_conn, search_term: str = ""):
     return channel_dict[channel_name]
 
 
-def choose_video(db_conn, search_term: str = "", channel_id: Optional[int] = None):
-    videos = search_video(db_conn, search_term, channel_id)
+def choose_video(
+    db_conn, search_term: str = "", channel_id: Optional[int] = None, last: bool = False
+):
+    videos = search_video(db_conn, search_term, channel_id, last)
+    if len(videos) == 1 and last:
+        return videos[0]
     video_dict = {video.title: video for video in videos}
     video_title = run_fzfmenu([video.title for video in videos])
+    if video_title == "":
+        return None
     return video_dict[video_title]
 
 
-def play_video_from_repertoire(db_conn, search_term: str = ""):
-    video_data = search_video_data(db_conn, search_term)
+def play_video_from_repertoire(db_conn, search_term: str = "", last: bool = False):
+    video_data = search_video_data(db_conn, search_term=search_term, last=last)
+    if video_data is None:
+        return
     filepath = get_filepath(video_data.filename)
-    subprocess.run(["mpv", filepath])
+    subprocess.run(["mpv", filepath, f'--force-media-title={video_data.channel_name}  #  {video_data.title}'])
 
 
-def open_url_from_repertoire(db_conn, search_term: str = ""):
-    video_data = search_video_data(db_conn, search_term)
+def open_url_from_repertoire(db_conn, search_term: str = "", last: bool = False):
+    video_data = search_video_data(db_conn, search_term, last=last)
+    if video_data is None:
+        return
     url = f"https://www.youtube.com/watch?v={video_data.ext_source_id}"
     print(url, file=sys.stdout)
     subprocess.run(["xdg-open", url])

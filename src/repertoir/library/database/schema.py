@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS channel (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     ext_source_id TEXT NOT NULL,
     name TEXT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(ext_source_id)
 );
         """
@@ -30,6 +31,7 @@ CREATE TABLE IF NOT EXISTS video (
     filename TEXT NOT NULL,
     channel_id INTEGER NOT NULL,
     watched BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(ext_source_id),
     UNIQUE(title),
     UNIQUE(filename),

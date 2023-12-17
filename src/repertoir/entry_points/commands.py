@@ -37,13 +37,15 @@ def cmd_search(search_term: str):
 
 
 @cmd_search.command("play")
-def cmd_play_video():
+@click.option("--get-last", is_flag=True)
+def cmd_play_video(get_last: bool):
     with get_connection() as db_conn:
-        play_video_from_repertoire(db_conn)
+        play_video_from_repertoire(db_conn, last=get_last)
 
 
 @cmd_search.command("url")
 @click.option("--get-url", is_flag=True)
-def cmd_open_url(get_url: bool):
+@click.option("--get-last", is_flag=True)
+def cmd_open_url(get_url: bool, get_last: bool):
     with get_connection() as db_conn:
-        open_url_from_repertoire(db_conn)
+        open_url_from_repertoire(db_conn, last=get_last)

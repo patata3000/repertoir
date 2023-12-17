@@ -34,13 +34,18 @@ def download_youtube_video(db_conn: DBConnection, url: str):
     notification_id = _send_notification(
         "Downloading video", "<i>Title incoming...</i>", "--printid"
     )
-    title = (
-        subprocess.check_output(["yt-dlp", "--no-download", "--get-title", url])
+    channel_name, title = (
+        subprocess.check_output(
+            ["yt-dlp", "--no-download", "--print", "channel", "--get-title", url]
+        )
         .decode("utf-8")
         .strip()
-    )
-    subprocess.check_output(
-        ["dunstify", "Downloading video", f"{title}", "--replace", notification_id]
+    ).split("\n")
+    _send_notification(
+        "Downloading video",
+        f"<b>{channel_name}</b>\n{title}",
+        "--replace",
+        notification_id,
     )
     INFO_JSON_TEMPLATE_NAME = "%(id)s"
     VIDEO_TEMPLATE_NAME = "%(id)s.%(ext)s"
@@ -77,11 +82,21 @@ def download_youtube_video(db_conn: DBConnection, url: str):
             url,
         ]
     )
-    _send_notification("Downloaded video", title, "--replace", notification_id)
+    _send_notification(
+        "Downloaded video",
+        f"<b>{channel_name}</b>\n{title}",
+        "--replace",
+        notification_id,
+    )
     channel, video = extract_metadata(info_json_filename, media_filename)
     channel_id = insert_channel(db_conn, channel.ext_source_id, channel.name)
     insert_video(db_conn, video.ext_source_id, video.title, video.path, channel_id)
-    _send_notification("Video inserted", title, "--replace", notification_id)
+    _send_notification(
+        "Video inserted",
+        f"<b>{channel_name}</b>\n{title}",
+        "--replace",
+        notification_id,
+    )
 
 
 def extract_metadata(info_json_filename: str, media_filename: str):
