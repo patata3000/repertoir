@@ -60,7 +60,7 @@ def play_video_from_repertoire(db_conn, search_term: str = "", last: bool = Fals
     if video_data is None:
         return
     filepath = get_filepath(video_data.filename)
-    subprocess.run(["mpv", filepath, f'--force-media-title={video_data.channel_name}  #  {video_data.title}'])
+    subprocess.run(["mpv", filepath, f'--force-media-title={video_data.channel_name}  ##  {video_data.title}'])
 
 
 def open_url_from_repertoire(db_conn, search_term: str = "", last: bool = False):

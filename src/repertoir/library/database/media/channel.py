@@ -27,11 +27,12 @@ RETURNING id
 def search_channel(db_conn: DBConnection, search_term: str) -> list[Channel]:
     channels = db_conn.execute(
         """
-SELECT DISTINCT channel.id, channel.name, channel.ext_source_id, channel.created_at
+SELECT DISTINCT channel.id, channel.name, channel.ext_source_id, channel.created_at, MAX(video.created_at)
 FROM channel
 JOIN video ON channel.id = video.channel_id
 WHERE name LIKE ?
-ORDER BY video.created_at DESC
+GROUP BY channel.id, channel.name, channel.ext_source_id, channel.created_at
+ORDER BY MAX(video.created_at) DESC
         """,
         (f"%{search_term}%",),
     ).fetchall()

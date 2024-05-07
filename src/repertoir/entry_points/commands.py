@@ -49,3 +49,6 @@ def cmd_play_video(get_last: bool):
 def cmd_open_url(get_url: bool, get_last: bool):
     with get_connection() as db_conn:
         open_url_from_repertoire(db_conn, last=get_last)
+
+if __name__ == "__main__":
+    cli()
