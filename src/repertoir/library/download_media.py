@@ -37,7 +37,7 @@ def _send_notification(
         args.extend(["--replace", replace_id])
     actions = actions or []
     for action in actions:
-        args.append(f"--action={",".join(action)}")
+        args.append(f"--action={", ".join(action)}")
     return (
         subprocess.check_output(["dunstify", title, body, *args])
         .decode("utf-8")

@@ -36,7 +36,10 @@ RETURNING id
 
 
 def search_video(
-    db_conn: DBConnection, search_term: str, channel_id: Optional[int] = None, last: bool = False
+    db_conn: DBConnection,
+    search_term: str,
+    channel_id: Optional[int] = None,
+    last: bool = False,
 ) -> list[Video]:
     if channel_id:
         videos = db_conn.execute(

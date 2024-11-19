@@ -21,7 +21,7 @@ repertoir = "repertoir.entry_points.commands:cli"
 [tool.poetry.dependencies]
 python = "3.11.9"
 click = ">=8.1.7"
-yt-dlp = ">=2023.11.16"
+# yt-dlp = ">=2023.11.16"
 requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
